@@ -1,4 +1,4 @@
-package aqualink.order;
+package com.aqualink.order;
 
 import com.aqualink.household.Household;
 import jakarta.persistence.*;

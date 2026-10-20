@@ -1,6 +1,6 @@
-package aqualink.provider;
+package com.aqualink.provider;
 
-import aqualink.user.User;
+import com.aqualink.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package aqualink.community;
+package com.aqualink.community;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,4 +16,8 @@ public class Community {
 
     @Column(name = "pooling_radius_m", nullable = false)
     private int poolingRadiusM = 300;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CommunityStatus status = CommunityStatus.ACTIVE;
 }

@@ -1,11 +1,11 @@
-package aqualink.household;
+package com.aqualink.household;
 
 import com.aqualink.community.Community;
 import com.aqualink.servicepoint.ServicePoint;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import src.main.java.aqualink.community.GeneratedValue;
+import jakarta.persistence.GeneratedValue;
 
 import java.math.BigDecimal;
 

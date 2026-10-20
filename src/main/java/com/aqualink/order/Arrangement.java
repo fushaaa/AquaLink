@@ -1,4 +1,4 @@
-package aqualink.order;
+package com.aqualink.order;
 
 public enum Arrangement {
     INDIVIDUAL_METER,
