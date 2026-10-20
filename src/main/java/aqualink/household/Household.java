@@ -5,6 +5,7 @@ import com.aqualink.servicepoint.ServicePoint;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import src.main.java.aqualink.community.GeneratedValue;
 
 import java.math.BigDecimal;
 
@@ -17,6 +18,7 @@ public class Household {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "community_id", nullable = false)
@@ -34,4 +36,8 @@ public class Household {
 
     @Column(nullable = false)
     private boolean vulnerable;
+    
+    @Column(name = "public_id", nullable = false, unique = true,
+        updatable = false, length = 36)
+private String publicId;
 }
