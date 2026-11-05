@@ -1,6 +1,6 @@
 package com.aqualink.household;
 
-import com.aqualink.community.Community;
+import com.aqualink.household.community.Community;
 import com.aqualink.servicepoint.ServicePoint;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,5 +39,8 @@ public class Household {
     
     @Column(name = "public_id", nullable = false, unique = true,
         updatable = false, length = 36)
-private String publicId;
+    private String publicId;
+
+    @Column(name = "display_name", nullable = false, length = 120)
+    private String displayName;
 }

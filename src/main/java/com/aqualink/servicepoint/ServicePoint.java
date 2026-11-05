@@ -1,6 +1,6 @@
 package com.aqualink.servicepoint;
 
-import com.aqualink.community.Community;
+import com.aqualink.household.community.Community;
 import com.aqualink.order.Arrangement;
 import jakarta.persistence.*;
 import lombok.Getter;

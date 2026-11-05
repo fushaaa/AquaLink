@@ -16,6 +16,34 @@ public interface WaterOrderRepository
     Optional<WaterOrder> findByHouseholdIdAndIdempotencyKey(
             Long householdId, String idempotencyKey);
 
+        Optional<WaterOrder> findTopByHouseholdIdOrderByCreatedAtDesc(Long householdId);
+
+        @Query(value = """
+          SELECT o.*
+          FROM water_orders o
+          JOIN household_users hu ON hu.household_id = o.household_id
+          WHERE hu.user_id = :userId
+          ORDER BY o.created_at DESC
+          """, countQuery = """
+          SELECT COUNT(*)
+          FROM water_orders o
+          JOIN household_users hu ON hu.household_id = o.household_id
+          WHERE hu.user_id = :userId
+          """, nativeQuery = true)
+        Page<WaterOrder> findAllForMemberUserId(
+            @Param("userId") Long userId,
+            Pageable pageable);
+
+        @Query(value = """
+          SELECT o.*
+          FROM water_orders o
+          JOIN household_users hu ON hu.household_id = o.household_id
+          WHERE o.public_id = :publicId AND hu.user_id = :userId
+          """, nativeQuery = true)
+        Optional<WaterOrder> findAccessibleByPublicId(
+            @Param("publicId") String publicId,
+            @Param("userId") Long userId);
+
     @Query("""
         select o from WaterOrder o
         where o.community.id = :communityId

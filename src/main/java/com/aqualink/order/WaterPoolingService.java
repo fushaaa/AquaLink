@@ -1,13 +1,15 @@
 package com.aqualink.order;
 
-import com.aqualink.community.CommunityRepository;
+import com.aqualink.household.community.CommunityRepository;
 import com.aqualink.household.Household;
 import com.aqualink.household.HouseholdRepository;
 import com.aqualink.provider.WaterProviderRepository;
+import com.aqualink.sms.SmsNotificationService;
 import com.aqualink.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ public class WaterPoolingService {
     private final WaterProviderRepository providers;
     private final UserRepository users;
     private final Clock clock;
+    private final SmsNotificationService smsNotifications;
 
     @Transactional
     public WaterOrder createRequest(
@@ -39,6 +42,34 @@ public class WaterPoolingService {
             Instant windowEnd,
             String idempotencyKey,
             String notes) {
+
+            return createRequest(requesterId, householdPublicId, quantityL,
+                windowStart, windowEnd, idempotencyKey, notes, true);
+            }
+
+            @Transactional
+            public WaterOrder createSmsRequest(
+                Long requesterId,
+                UUID householdPublicId,
+                int quantityL,
+                Instant windowStart,
+                Instant windowEnd,
+                String idempotencyKey,
+                String notes) {
+
+            return createRequest(requesterId, householdPublicId, quantityL,
+                windowStart, windowEnd, idempotencyKey, notes, false);
+            }
+
+            private WaterOrder createRequest(
+                Long requesterId,
+                UUID householdPublicId,
+                int quantityL,
+                Instant windowStart,
+                Instant windowEnd,
+                String idempotencyKey,
+                String notes,
+                boolean sendNotification) {
 
         if (quantityL <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than zero");
@@ -52,8 +83,9 @@ public class WaterPoolingService {
         Household household = households.findByPublicId(householdPublicId.toString())
                 .orElseThrow(() -> new IllegalArgumentException("Household not found"));
 
-        // TODO authorization: verify requesterId belongs to this household via household_users
-        // (e.g. households.isMember(household.getId(), requesterId)) before allowing the order.
+        if (households.countMemberships(household.getId(), requesterId) == 0) {
+            throw new AccessDeniedException("User is not a member of this household");
+        }
 
         if (idempotencyKey != null) {
             var existing = orders.findByHouseholdIdAndIdempotencyKey(
@@ -76,7 +108,11 @@ public class WaterPoolingService {
                 windowStart, windowEnd, poolBy,
                 idempotencyKey, notes);
 
-        return orders.save(order);
+        WaterOrder saved = orders.save(order);
+        if (sendNotification) {
+            smsNotifications.orderCreatedAfterCommit(requester.getPhoneE164(), saved);
+        }
+        return saved;
     }
 
     @Transactional

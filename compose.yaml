@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: aqualink
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Copy .env.example to .env and set MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${AQUALINK_DB_USERNAME:-aqualink_app}
+      MYSQL_PASSWORD: ${AQUALINK_DB_PASSWORD:?Set AQUALINK_DB_PASSWORD in .env}
+    ports:
+      - "3307:3306"
+    volumes:
+      - aqualink-mysql:/var/lib/mysql
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+      - ./database/demo-seed.sql:/docker-entrypoint-initdb.d/002-demo-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      AQUALINK_DB_URL: jdbc:mysql://mysql:3306/aqualink?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&sslMode=DISABLED
+      AQUALINK_DB_USERNAME: ${AQUALINK_DB_USERNAME:-aqualink_app}
+      AQUALINK_DB_PASSWORD: ${AQUALINK_DB_PASSWORD:?Set AQUALINK_DB_PASSWORD in .env}
+      AQUALINK_TWILIO_ACCOUNT_SID: ${AQUALINK_TWILIO_ACCOUNT_SID:-}
+      AQUALINK_TWILIO_AUTH_TOKEN: ${AQUALINK_TWILIO_AUTH_TOKEN:-}
+      AQUALINK_TWILIO_FROM_NUMBER: ${AQUALINK_TWILIO_FROM_NUMBER:-}
+      AQUALINK_TWILIO_WEBHOOK_URL: ${AQUALINK_TWILIO_WEBHOOK_URL:-}
+      AQUALINK_AI_API_KEY: ${AQUALINK_AI_API_KEY:-}
+      AQUALINK_AI_BASE_URL: ${AQUALINK_AI_BASE_URL:-https://api.openai.com/v1}
+      AQUALINK_AI_MODEL: ${AQUALINK_AI_MODEL:-gpt-4o-mini}
+    ports:
+      - "8080:8080"
+
+volumes:
+  aqualink-mysql:
