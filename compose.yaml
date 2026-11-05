@@ -4,8 +4,10 @@ services:
     environment:
       MYSQL_DATABASE: aqualink
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Copy .env.example to .env and set MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${AQUALINK_DB_USERNAME:-aqualink_app}
+      MYSQL_PASSWORD: ${AQUALINK_DB_PASSWORD:?Set AQUALINK_DB_PASSWORD in .env}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - aqualink-mysql:/var/lib/mysql
       - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
@@ -23,8 +25,8 @@ services:
         condition: service_healthy
     environment:
       AQUALINK_DB_URL: jdbc:mysql://mysql:3306/aqualink?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&sslMode=DISABLED
-      AQUALINK_DB_USERNAME: root
-      AQUALINK_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      AQUALINK_DB_USERNAME: ${AQUALINK_DB_USERNAME:-aqualink_app}
+      AQUALINK_DB_PASSWORD: ${AQUALINK_DB_PASSWORD:?Set AQUALINK_DB_PASSWORD in .env}
       AQUALINK_TWILIO_ACCOUNT_SID: ${AQUALINK_TWILIO_ACCOUNT_SID:-}
       AQUALINK_TWILIO_AUTH_TOKEN: ${AQUALINK_TWILIO_AUTH_TOKEN:-}
       AQUALINK_TWILIO_FROM_NUMBER: ${AQUALINK_TWILIO_FROM_NUMBER:-}

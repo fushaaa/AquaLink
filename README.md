@@ -18,7 +18,7 @@ Other messages receive AI assistance when `AQUALINK_AI_API_KEY` is configured. T
 
 ## Run locally
 
-Install Docker Desktop, copy `.env.example` to `.env`, set a local `MYSQL_ROOT_PASSWORD`, then start the app and database from the project root:
+Install Docker Desktop, copy `.env.example` to `.env`, set unique local values for `MYSQL_ROOT_PASSWORD` and `AQUALINK_DB_PASSWORD`, then start the app and database from the project root:
 
 ```powershell
 Copy-Item .env.example .env
@@ -26,5 +26,7 @@ docker compose up --build
 ```
 
 Open `http://localhost:8080`. The demo login is `+15555550123` with password `password`. This account is seeded only for local development; change or remove it before using any shared or deployed environment. The database schema and seed are run when the MySQL data volume is created for the first time. To reinitialize a local database, remove the `aqualink-mysql` Compose volume; this deletes its data.
+
+Compose publishes its MySQL port on host port `3307` so it does not conflict with a locally installed MySQL service on `3306`. The application connects to the container over Docker's private network.
 
 The resident UI uses HTTP Basic authentication over the same origin. The authenticated APIs are `GET /api/v1/me`, `GET /api/v1/households`, `GET /api/v1/water-orders`, `GET /api/v1/water-orders/{publicId}`, and `POST /api/v1/water-orders`. Pooling runs require a community-manager or admin role scoped to the service point. Production deployments must terminate HTTPS, use unique strong passwords, and replace the demo seed with a proper account-registration or provisioning flow.
