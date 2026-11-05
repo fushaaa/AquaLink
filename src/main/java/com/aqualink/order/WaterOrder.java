@@ -1,6 +1,6 @@
 package com.aqualink.order;
 
-import com.aqualink.community.Community;
+import com.aqualink.household.community.Community;
 import com.aqualink.household.Household;
 import com.aqualink.provider.WaterProvider;
 import com.aqualink.servicepoint.ServicePoint;

@@ -18,10 +18,11 @@ Other messages receive AI assistance when `AQUALINK_AI_API_KEY` is configured. T
 
 ## Run locally
 
-Install Docker Desktop, copy `.env.example` to `.env`, set unique local values for `MYSQL_ROOT_PASSWORD` and `AQUALINK_DB_PASSWORD`, then start the app and database from the project root:
+Install Docker Desktop, copy `.env.example` to `.env`, set unique local values for `MYSQL_ROOT_PASSWORD` and `AQUALINK_DB_PASSWORD`, then build the application JAR and start the app and database from the project root:
 
 ```powershell
 Copy-Item .env.example .env
+mvn -DskipTests package
 docker compose up --build
 ```
 

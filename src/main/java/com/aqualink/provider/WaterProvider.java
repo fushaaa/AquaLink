@@ -95,20 +95,6 @@ public class WaterProvider {
         }
     }
 
-    // ===== Embedded Enums =====
-    public enum VerificationStatus {
-        PENDING,
-        VERIFIED,
-        REJECTED,
-        SUSPENDED
-    }
-
-    public enum Availability {
-        AVAILABLE,
-        BUSY,
-        OFFLINE
-    }
-
     public enum VehicleType {
         HANDCART,
         TUKTUK,

@@ -1,4 +1,4 @@
-package com.aqualink.community;
+package com.aqualink.household.community;
 
 import jakarta.persistence.*;
 import lombok.Getter;

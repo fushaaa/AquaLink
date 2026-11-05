@@ -83,7 +83,7 @@ public class WaterOrderController {
             @Valid @RequestBody PoolingRunRequest request) {
 
                 User requester = requireUser(principal);
-                if (!users.canManageServicePoint(requester.getId(), servicePointId)) {
+                if (users.countServicePointManagerRoles(requester.getId(), servicePointId) == 0) {
                         throw new AccessDeniedException("User cannot manage this service point");
                 }
         return poolingService.poolAtServicePoint(

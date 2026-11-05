@@ -1,6 +1,6 @@
 package com.aqualink.order;
 
-import com.aqualink.community.CommunityRepository;
+import com.aqualink.household.community.CommunityRepository;
 import com.aqualink.household.Household;
 import com.aqualink.household.HouseholdRepository;
 import com.aqualink.provider.WaterProviderRepository;
@@ -83,7 +83,7 @@ public class WaterPoolingService {
         Household household = households.findByPublicId(householdPublicId.toString())
                 .orElseThrow(() -> new IllegalArgumentException("Household not found"));
 
-        if (!households.isMember(household.getId(), requesterId)) {
+        if (households.countMemberships(household.getId(), requesterId) == 0) {
             throw new AccessDeniedException("User is not a member of this household");
         }
 

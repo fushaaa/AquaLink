@@ -32,11 +32,11 @@ public interface HouseholdRepository
     java.util.List<Household> findAllByMemberUserId(@Param("userId") Long userId);
 
     @Query(value = """
-        SELECT COUNT(*) > 0
+        SELECT COUNT(*)
         FROM household_users
         WHERE household_id = :householdId AND user_id = :userId
         """, nativeQuery = true)
-    boolean isMember(
+    long countMemberships(
             @Param("householdId") Long householdId,
             @Param("userId") Long userId);
 }

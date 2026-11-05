@@ -1,3 +1,3 @@
-package com.aqualink.community;
+package com.aqualink.household.community;
 
 public enum CommunityStatus { ACTIVE, INACTIVE }

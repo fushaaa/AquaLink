@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<String> findRoleCodesByUserId(@Param("userId") Long userId);
 
 	@Query(value = """
-		SELECT COUNT(*) > 0
+		SELECT COUNT(*)
 		FROM user_roles ur
 		JOIN roles r ON r.id = ur.role_id
 				JOIN service_points sp ON sp.id = :servicePointId
@@ -28,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 		  AND r.code IN ('COMMUNITY_MANAGER', 'ADMIN')
 					AND (ur.community_id IS NULL OR ur.community_id = sp.community_id)
 		""", nativeQuery = true)
-	boolean canManageServicePoint(
+	long countServicePointManagerRoles(
 			@Param("userId") Long userId,
 			@Param("servicePointId") Long servicePointId);
 }
