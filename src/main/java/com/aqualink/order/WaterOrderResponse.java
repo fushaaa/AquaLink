@@ -8,7 +8,8 @@ public record WaterOrderResponse(
     OrderStatus status,
     int quantityL,
     Instant windowStart,
-    Instant windowEnd
+    Instant windowEnd,
+    Instant createdAt
 ) {
     public static WaterOrderResponse from(WaterOrder order) {
         return new WaterOrderResponse(
@@ -17,7 +18,8 @@ public record WaterOrderResponse(
             order.getStatus(),
             order.getQuantityL(),
             order.getWindowStart(),
-            order.getWindowEnd()
+            order.getWindowEnd(),
+            order.getCreatedAt()
         );
     }
 }
