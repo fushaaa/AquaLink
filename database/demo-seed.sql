@@ -11,7 +11,7 @@ INSERT INTO users (
   preferred_language, status
 ) VALUES (
   1, 'a1000000-0000-4000-8000-000000000002', '+15555550123',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+  '$2a$10$/nJ1BT7eZtOkRnmsverFuu3T2ti6uMPDR5ki0fnJq/GF9LaEdvYrK',
   'Demo Resident', 'en', 'ACTIVE'
 );
 
